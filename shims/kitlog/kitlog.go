@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"os"
 
-	log "github.com/rantav/go-logger"
+	originlog "github.com/InVisionApp/go-logger"
 	kitlog "github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
+	log "github.com/rantav/go-logger"
 )
 
 type shim struct {
@@ -155,4 +156,23 @@ func (s *shim) WithFields(fields log.Fields) log.Logger {
 	return &shim{
 		logger: kitlog.With(s.logger, keyvals...),
 	}
+}
+
+func (s *shim) AsInvisionLogger() originlog.Logger {
+	return &originshim{s}
+}
+
+type originshim struct {
+	*shim
+}
+
+func (s *originshim) WithFields(fields originlog.Fields) originlog.Logger {
+	var keyvals []interface{}
+
+	for key, value := range fields {
+		keyvals = append(keyvals, key, value)
+	}
+	os := &originshim{}
+	os.logger = kitlog.With(s.logger, keyvals...)
+	return os
 }

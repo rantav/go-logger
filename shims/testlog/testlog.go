@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	originlog "github.com/InVisionApp/go-logger"
 	log "github.com/rantav/go-logger"
 )
 
@@ -173,6 +174,10 @@ func (t *TestLogger) WithFields(fields log.Fields) log.Logger {
 	}
 
 	return cp
+}
+
+func (t *TestLogger) AsInvisionLogger() originlog.Logger {
+	return nil // b/c we don't care
 }
 
 // helper for pretty printing of fields

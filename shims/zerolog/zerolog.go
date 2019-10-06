@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	originlog "github.com/InVisionApp/go-logger"
 	log "github.com/rantav/go-logger"
 	"github.com/rs/zerolog"
 )
@@ -141,6 +142,21 @@ func (s *shim) Panicf(format string, args ...interface{}) {
 // zerolog logger, with the provided fields added to the log string,
 // as a key-value pair
 func (s *shim) WithFields(fields log.Fields) log.Logger {
+	lg := s.logger.With().Fields(fields).Logger()
+	s.logger = &lg
+
+	return s
+}
+
+func (s *shim) AsInvisionLogger() originlog.Logger {
+	return &originshim{s}
+}
+
+type originshim struct {
+	*shim
+}
+
+func (s *originshim) WithFields(fields originlog.Fields) originlog.Logger {
 	lg := s.logger.With().Fields(fields).Logger()
 	s.logger = &lg
 

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	stdlog "log"
 	"os"
+
+	originlog "github.com/InVisionApp/go-logger"
 )
 
 //go:generate counterfeiter -o shims/fake/fake_logger.go . Logger
@@ -38,6 +40,8 @@ type Logger interface {
 	Panicf(format string, args ...interface{})
 
 	WithFields(Fields) Logger
+
+	AsInvisionLogger() originlog.Logger
 }
 
 // Fields is used to define structured fields which are appended to log messages
@@ -180,6 +184,10 @@ func (b *simple) Panicf(format string, args ...interface{}) {
 	panic(fmt.Sprintf(format, args...))
 }
 
+func (b *simple) AsInvisionLogger() originlog.Logger {
+	return originlog.NewSimple().WithFields(b.fields)
+}
+
 // helper for pretty printing of fields
 func pretty(m map[string]interface{}) string {
 	if len(m) < 1 {
@@ -262,3 +270,5 @@ func (n *noop) Panicf(format string, args ...interface{}) {}
 
 // WithFields no-op
 func (n *noop) WithFields(fields Fields) Logger { return n }
+
+func (n *noop) AsInvisionLogger() originlog.Logger { return originlog.NewNoop() }
