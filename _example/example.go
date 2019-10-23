@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/AppsFlyer/go-logger"
-	"github.com/AppsFlyer/go-logger/shims/_fake"
+	log "github.com/AppsFlyer/go-logger"
+	fake "github.com/AppsFlyer/go-logger/shims/_fake"
 	"github.com/AppsFlyer/go-logger/shims/logrus"
+	"github.com/AppsFlyer/go-logger/shims/kitlog"
 	"github.com/AppsFlyer/go-logger/shims/testlog"
+	"github.com/AppsFlyer/go-logger/shims/zerolog"
 )
 
 func main() {
@@ -16,9 +18,11 @@ func main() {
 	**********************/
 
 	loggers := map[string]log.Logger{
-		"Simple": log.NewSimple(),
-		"No-op":  log.NewNoop(),
-		"Logrus": logrus.New(nil),
+		"Simple":  log.NewSimple(),
+		"No-op":   log.NewNoop(),
+		"Logrus":  logrus.New(nil),
+		"Zerolog": zerolog.New(nil),
+		"Kitlog": kitlog.New(nil),
 	}
 
 	// sleeps for print order
@@ -29,6 +33,7 @@ func main() {
 
 		lg.Info(name, "logger")
 		lg.WithFields(log.Fields{"foo": "bar"}).Errorf("%s logger", name)
+		lg.WithFields(log.Fields{"bar": "foo"}).Errorf("%s logger", name)
 
 		time.Sleep(time.Millisecond * 10)
 		fmt.Println()
