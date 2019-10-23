@@ -4,7 +4,7 @@ package fake
 import (
 	"sync"
 
-	log "github.com/rantav/go-logger"
+	log "github.com/AppsFlyer/go-logger"
 )
 
 type FakeLogger struct {
@@ -78,6 +78,7 @@ func (fake *FakeLogger) Debug(msg ...interface{}) {
 		fake.DebugStub(msg...)
 	}
 }
+func (fake *FakeLogger) Debugln(msg ...interface{}) { fake.Debug(msg...) }
 
 func (fake *FakeLogger) DebugCallCount() int {
 	fake.debugMutex.RLock()
@@ -91,6 +92,7 @@ func (fake *FakeLogger) DebugArgsForCall(i int) []interface{} {
 	return fake.debugArgsForCall[i].msg
 }
 
+func (fake *FakeLogger) Infoln(msg ...interface{}) { fake.Info(msg...) }
 func (fake *FakeLogger) Info(msg ...interface{}) {
 	fake.infoMutex.Lock()
 	fake.infoArgsForCall = append(fake.infoArgsForCall, struct {
@@ -115,6 +117,7 @@ func (fake *FakeLogger) InfoArgsForCall(i int) []interface{} {
 	return fake.infoArgsForCall[i].msg
 }
 
+func (fake *FakeLogger) Warnln(msg ...interface{}) { fake.Warn(msg...) }
 func (fake *FakeLogger) Warn(msg ...interface{}) {
 	fake.warnMutex.Lock()
 	fake.warnArgsForCall = append(fake.warnArgsForCall, struct {
@@ -139,6 +142,8 @@ func (fake *FakeLogger) WarnArgsForCall(i int) []interface{} {
 	return fake.warnArgsForCall[i].msg
 }
 
+func (fake *FakeLogger) Errorln(msg ...interface{}) { fake.Error(msg...) }
+
 func (fake *FakeLogger) Error(msg ...interface{}) {
 	fake.errorMutex.Lock()
 	fake.errorArgsForCall = append(fake.errorArgsForCall, struct {
@@ -150,6 +155,17 @@ func (fake *FakeLogger) Error(msg ...interface{}) {
 		fake.ErrorStub(msg...)
 	}
 }
+
+func (fake *FakeLogger) Fatal(msg ...interface{}) {
+	// TODO
+}
+func (fake *FakeLogger) Fatalln(msg ...interface{})          { fake.Fatal(msg...) }
+func (fake *FakeLogger) Fatalf(s string, msg ...interface{}) { fake.Fatal(msg...) }
+func (fake *FakeLogger) Panic(msg ...interface{}) {
+	// TODO
+}
+func (fake *FakeLogger) Panicln(msg ...interface{})          { fake.Panic(msg...) }
+func (fake *FakeLogger) Panicf(s string, msg ...interface{}) { fake.Panic(msg...) }
 
 func (fake *FakeLogger) ErrorCallCount() int {
 	fake.errorMutex.RLock()

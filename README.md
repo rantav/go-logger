@@ -25,7 +25,7 @@ Finally, there is a `WithFields(Fields)` method that will allow you to define a 
 The simple logger is a wrapper for the standard logging library which meets this logger interface. It provides very basic logging functionality with log levels in messages.
 
 ```go
-import "github.com/InVisionApp/go-logger"
+import "github.com/appsflyer/go-logger"
 
 logger := log.NewSimple()
 logger.Debug("this is a debug message")
@@ -39,7 +39,7 @@ output:
 If you do not wish to perform any sort of logging whatsoever, you can point to a noop logger. This is useful for silencing logs in tests, or allowing users to turn of logging in your library.
 
 ```go
-import "github.com/InVisionApp/go-logger"
+import "github.com/appsflyer/go-logger"
 
 logger := log.NewNoop()
 logger.Debug("this is a debug message")
@@ -50,7 +50,7 @@ _no output_
 This shim allows you to use logrus as your logger implementation. If you wish to use the standard logrus logger, pass `nil` to the constructor. Otherwise, pass in your own `logrus.Logger`.
 
 ```go
-import "github.com/InVisionApp/go-logger/shims/logrus"
+import "github.com/appsflyer/go-logger/shims/logrus"
 
 // Default logrus logger
 logger := logrus.New(nil)
@@ -61,11 +61,11 @@ Or alternatively, you can provide your own logrus logger:
 ```go
 import (
 	lgrs "github.com/sirupsen/logrus"
-	"github.com/InVisionApp/go-logger/shims/logrus"
+	"github.com/appsflyer/go-logger/shims/logrus"
 )
 
 myLogrus := lgrs.New()
-myLogrus.Out = &bytes.Buffer{} 
+myLogrus.Out = &bytes.Buffer{}
 logger := logrus.New(myLogrus)
 logger.Debug("this is a debug message")
 ```
@@ -76,14 +76,14 @@ time="2018-03-04T13:12:35-08:00" level=debug msg="this is a debug message"
 ```
 
 ### Zerolog Logger
-This shim allows you to use [zerolog](https://github.com/rs/zerolog) as your logging implementation.  If you pass `nil` into `New(...)`, 
+This shim allows you to use [zerolog](https://github.com/rs/zerolog) as your logging implementation.  If you pass `nil` into `New(...)`,
 you will get a default `zerolog.Logger` writing to `stdout` with a timestamp attached.
 
 Alternatively, you can pass your own instance of `zerolog.Logger` to `New(...)`.
 
 Using the `zerolog` default logger:
 ```go
-import "github.com/InVisionApp/go-logger/shims/zerolog"
+import "github.com/appsflyer/go-logger/shims/zerolog"
 
 func main() {
 	logger := zerolog.New(nil)
@@ -96,9 +96,9 @@ Using your own logger:
 ```go
 import (
 	"os"
-	
+
 	zl "github.com/rs/zerolog"
-	"github.com/InVisionApp/go-logger/shims/zerolog"
+	"github.com/appsflyer/go-logger/shims/zerolog"
 )
 
 func main() {
@@ -107,8 +107,8 @@ func main() {
 	sLogger := zerolog.New(structuredLogger)
 	sLogger.Debug("debug message")
 	// {"level":"debug", "message":"debug message"}
-	
-	// If you want to use zerolog for human-readable console logging, 
+
+	// If you want to use zerolog for human-readable console logging,
 	// you create a ConsoleWriter and use it as your io.Writer implementation
 	consoleLogger := zl.New(zl.ConsoleWriter{
 		Out: os.Stdout,
